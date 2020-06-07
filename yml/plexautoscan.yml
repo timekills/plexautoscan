@@ -11,14 +11,14 @@
         pgrole: 'plexautoscan'
         intport: '3468'
         extport: '3468'
-        image: 'sabrsorensen/alpine-plex_autoscan'
+        image: 'mrdoob/pascan:latest'
 
     # CORE (MANDATORY) ############################################################
     - name: 'Including cron job'
-      include_tasks: './core.yml'
+      include_tasks: '/opt/coreapps/apps/_core.yml'
 
     - name: 'Including PAS Tasks'
-      include_tasks: './pastask.yml'
+      include_tasks: '/opt/plexguide/menu/pgscan/yml/pastask.yml'
 
     # LABELS ######################################################################
     - name: 'Adding Traefik'
