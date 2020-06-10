@@ -44,9 +44,10 @@
           - '/mnt/unionfs/:/data'
           - '/opt/appdata/{{pgrole}}/config:/config'
           - '/opt/appdata/plex/database/Library/Application Support/Plex Media Server/Plug-in Support/Databases/:/plexDb'
-          - '{{path.stdout}}:{{path.stdout}}'
           - '/etc/localtime:/etc/localtime:ro'
           - '/var/run/docker.sock:/var/run/docker.sock'
+          - '/opt/appdata/plexguide:/config/rclone:ro'
+          - '/usr/bin:/programs'
 
     - name: 'Setting {{pgrole}} ENV'
       set_fact:
