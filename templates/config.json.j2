@@ -36,7 +36,7 @@
    "PLEX_DATABASE_PATH": "/plexDb/com.plexapp.plugins.library.db",
    "PLEX_EMPTY_TRASH": true,
    "PLEX_EMPTY_TRASH_CONTROL_FILES":[
-      "/mnt/unionfs/mounted.bin"
+      "{{path.stdout}}/mounted.bin"
    ],
    "PLEX_EMPTY_TRASH_MAX_FILES": 50,
    "PLEX_EMPTY_TRASH_ZERO_DELETED": true,
@@ -79,7 +79,7 @@
    "SERVER_IP": "0.0.0.0",
    "SERVER_PASS": "{{plex_autoscan_server_pass.stdout}}",
    "SERVER_PATH_MAPPINGS":{
-     "/mnt/unionfs/": [
+     "{{path.stdout}}/unionfs/": [
        "/home/user/media/fused/"
      ]
    },
