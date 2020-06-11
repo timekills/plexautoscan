@@ -53,7 +53,13 @@
   register: plex_docker_user
 
 - name: Create mounted.bin for trash
-  shell: 'touch /mnt/unionfs/mounted.bin'
+  shell: 'fallocate -l 10M $(cat /var/plexguide/server.hd.path)/unionfs/mounted.bin'
+
+- name: set permissions on mounted.bin for trash || part 1
+  shell: 'chown 1000;1000 $(cat /var/plexguide/server.hd.path)/unionfs/mounted.bin'
+
+- name: set permissions on mounted.bin for trash || part 2
+  shell: 'chmod a+x $(cat /var/plexguide/server.hd.path)/unionfs/mounted.bin'
 
 - name: Set User Permission  for Plex Folder | part 1
   shell: 'chown 1000:1000 "/opt/appdata/plex/database/Library/Application Support/"'
