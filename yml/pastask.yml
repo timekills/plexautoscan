@@ -56,7 +56,7 @@
   shell: 'touch $(cat /var/plexguide/server.hd.path)/unionfs/mounted.bin'
 
 - name: set permissions on mounted.bin for trash || part 1
-  shell: 'chown 1000;1000 $(cat /var/plexguide/server.hd.path)/unionfs/mounted.bin'
+  shell: 'chown 1000:1000 $(cat /var/plexguide/server.hd.path)/unionfs/mounted.bin'
 
 - name: set permissions on mounted.bin for trash || part 2
   shell: 'chmod a+x $(cat /var/plexguide/server.hd.path)/unionfs/mounted.bin'
