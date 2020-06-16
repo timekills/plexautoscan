@@ -48,6 +48,7 @@
           - '/var/run/docker.sock:/var/run/docker.sock'
           - '/opt/appdata/plexguide:/config/rclone:ro'
           - '/usr/bin:/programs'
+          - '/mnt:/mnt'
 
     - name: 'Setting {{pgrole}} ENV'
       set_fact:
