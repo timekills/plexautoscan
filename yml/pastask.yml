@@ -52,6 +52,10 @@
   shell: 'cat /var/plexguide/pgscan/plex.docker'
   register: plex_docker_user
 
+- name: Register Plex lib folder
+  shell: 'cat /var/plexguide/pgscan/plex.path'
+  register: plex_lib_folder
+
 - name: Create mounted.bin for trash
   shell: 'touch $(cat /var/plexguide/server.hd.path)/unionfs/mounted.bin'
 
@@ -128,6 +132,10 @@
   - name: Register Plex Docker Image status
     shell: 'cat /var/plexguide/pgscan/plex.docker'
     register: plex_docker_user
+
+  - name: Register Plex lib folder
+    shell: 'cat /var/plexguide/pgscan/plex.path'
+    register: plex_lib_folder
 
   when: not plex_autoscan_config.stat.exists
  
