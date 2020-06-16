@@ -12,6 +12,7 @@ sudo mkdir -p /var/plexguide/pgscan
 sudo echo "en" >/var/plexguide/pgscan/fixmatch.lang
 sudo echo "false" >/var/plexguide/pgscan/fixmatch.status
 sudo echo "NOT-SET" >/var/plexguide/pgscan/plex.docker
+sudo echo "/var/lib/plexmediaserver/Library/Application\\\ Support" >/var/plexguide/pgscan/plex.path
 fi
 
 variable() {
@@ -28,11 +29,11 @@ tokenstatus() {
   ptokendep=$(cat /var/plexguide/pgscan/plex.token)
   if [[ "$ptokendep" != "" ]]; then
         if [[ ! -f "/opt/appdata/plexautoscan/config/config.json" ]]; then
-                pstatus="✅ TOKEN DEPLOYED || ⚠️ PAS CONFIG MISSING";
+            pstatus="✅ TOKEN DEPLOYED || ⚠️ PAS NOT DEPLOYED";
         else
-                PGSELFTEST=$(curl -LI "http://$(hostname -I | awk '{print $1}'):32400/system?X-Plex-Token=$(cat /opt/appdata/plexautoscan/config/config.json | jq .PLEX_TOKEN | sed 's/"//g')" -o /dev/null -w '%{http_code}\n' -s)
-                if [[ $PGSELFTEST -ge 200 && $PGSELFTEST -le 299 ]]; then pstatus="✅ TOKEN DEPLOYED"
-                else pstatus="⚠️	DOCKER DEPLOYED || ❌ PAS TOKEN FAILED"; fi
+            PGSELFTEST=$(curl -LI "http://$(hostname -I | awk '{print $1}'):32400/system?X-Plex-Token=$(cat /opt/appdata/plexautoscan/config/config.json | jq .PLEX_TOKEN | sed 's/"//g')" -o /dev/null -w '%{http_code}\n' -s)
+            if [[ $PGSELFTEST -ge 200 && $PGSELFTEST -le 299 ]]; then pstatus="✅ TOKEN DEPLOYED"
+            else pstatus="⚠️	DOCKER DEPLOYED || ❌ PAS TOKEN FAILED"; fi
         fi
   else pstatus="⚠️ NOT DEPLOYED"; fi
 }
@@ -171,10 +172,11 @@ docker stop plexautoscan
 docker rm plexautoscan
 rm -rf /opt/appdata/plexautoscan
 rm -rf /var/plexguide/pgscan
-fresh
+mkidr -p /var/plexguide/pgscan
 echo "en" >/var/plexguide/pgscan/fixmatch.lang
 echo "false" >/var/plexguide/pgscan/fixmatch.status
 echo "NOT-SET" >/var/plexguide/pgscan/plex.docker
+echo "/var/lib/plexmediaserver/Library/Application\\\ Support" >/var/plexguide/pgscan/plex.path
 
 printf '
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -312,14 +314,18 @@ EOF
   esac
 }
 pversion() {
-plexcontainerversion=$(docker ps --format '{{.Image}}' | grep "plex:")
-  if [[ "$plexcontainerversion" == "plexinc/pms-docker" ]]; then
-      echo "plex" >/var/plexguide/pgscan/plex.dockeruserset
-      echo "/var/lib/plexmediaserver/Library/Application\\ Support" >/var/plexguide/pgscan/plex.path
-   else
-      echo "abc" >/var/plexguide/pgscan/plex.dockeruserset
-      echo "/config/Library/Application\\ Support" >/var/plexguide/pgscan/plex.path
+
+plexcontainerpms=$(docker ps --format '{{.Image}}' | grep "plexinc/pms")
+if [[ "$plexcontainerpms" == "plexinc/pms" ]]; then
+    echo "plex" >/var/plexguide/pgscan/plex.dockeruserset
+    echo "/var/lib/plexmediaserver/Library/Application\\\ Support" >/var/plexguide/pgscan/plex.path
 fi
+plexcontainerlsio=$(docker ps --format '{{.Image}}' | grep "linuxserver/plex")
+if [[ "$plexcontainerlsio" == "linuxserver/plex" ]]; then
+    echo "abc" >/var/plexguide/pgscan/plex.dockeruserset
+    echo "/config/Library/Application\\\ Support" >/var/plexguide/pgscan/plex.path
+fi
+plexcontainer=$(docker ps --format '{{.Image}}' | grep "/plex")
 pasuserdocker=$(cat /var/plexguide/pgscan/plex.dockeruserset)
 
 tee <<-EOF
@@ -331,7 +337,7 @@ Linuxserver Docker  used "abc"
 Plex        Docker  used "plex"
 
 
-Plex Docker Image:          [ $plexcontainerversion ]
+Plex Docker Image:          [ $plexcontainer ]
 Set Plex Docker user:       [ $pasuserdocker ]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -461,11 +467,11 @@ EOF
   esac
 }
 # FUNCTIONS END ##############################################################
-fresh
 plexcheck
 tokenstatus
 variable /var/plexguide/pgscan/fixmatch.lang "en"
 variable /var/plexguide/pgscan/fixmatch.status "false"
 variable /var/plexguide/pgscan/plex.docker "NOT-SET"
+varibale /var/plexguide/pgscan/plex.path "/var/lib/plexmediaserver/Library/Application\\\ Support"
 deploycheck
 question1
