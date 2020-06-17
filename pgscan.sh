@@ -33,7 +33,7 @@ tokenstatus() {
         else
             PGSELFTEST=$(curl -LI "http://$(hostname -I | awk '{print $1}'):32400/system?X-Plex-Token=$(cat /opt/appdata/plexautoscan/config/config.json | jq .PLEX_TOKEN | sed 's/"//g')" -o /dev/null -w '%{http_code}\n' -s)
             if [[ $PGSELFTEST -ge 200 && $PGSELFTEST -le 299 ]]; then pstatus="✅ TOKEN DEPLOYED"
-            else pstatus="⚠️	DOCKER DEPLOYED || ❌ PAS TOKEN FAILED"; fi
+            else pstatus="⚠️ DOCKER DEPLOYED || ❌ PAS TOKEN FAILED"; fi
         fi
   else pstatus="⚠️ NOT DEPLOYED"; fi
 }
@@ -320,12 +320,14 @@ if [[ "$plexcontainerpms" == "plexinc/pms" ]]; then
     echo "plex" >/var/plexguide/pgscan/plex.dockeruserset
     echo "/var/lib/plexmediaserver/Library/Application\\\ Support" >/var/plexguide/pgscan/plex.path
 fi
+
 plexcontainerlsio=$(docker ps --format '{{.Image}}' | grep "linuxserver/plex")
 if [[ "$plexcontainerlsio" == "linuxserver/plex" ]]; then
     echo "abc" >/var/plexguide/pgscan/plex.dockeruserset
     echo "/config/Library/Application\\\ Support" >/var/plexguide/pgscan/plex.path
 fi
-plexcontainer=$(docker ps --format '{{.Image}}' | grep "/plex")
+
+plexcontainer=$(docker ps --format '{{.Image}}' | grep "plex")
 pasuserdocker=$(cat /var/plexguide/pgscan/plex.dockeruserset)
 
 tee <<-EOF
@@ -337,8 +339,8 @@ Linuxserver Docker  used "abc"
 Plex        Docker  used "plex"
 
 
-Plex Docker Image:          [ $plexcontainer ]
-Set Plex Docker user:       [ $pasuserdocker ]
+Plex Docker Image:     [ $plexcontainer ]
+Plex Docker user:      [ $pasuserdocker ]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
