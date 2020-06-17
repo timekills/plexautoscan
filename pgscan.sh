@@ -314,13 +314,13 @@ EOF
 }
 pversion() {
 
-plexcontainertest=$(docker ps --format '{{.Image}}' | grep "plexinc/pms")
-if [[ "$plexcontainertest" == "plexinc/pms" ]]; then
-    echo "plex" >/var/plexguide/pgscan/plex.dockeruserset
-    echo "/var/lib/plexmediaserver/Library/Application\\\ Support" >/var/plexguide/pgscan/plex.path
-else
+plexcontainertest=$(docker ps --format '{{.Image}}' | grep "plex:")
+if [[ "$plexcontainertest" == "linuxserver/plex:latest"  ]]; then
     echo "abc" >/var/plexguide/pgscan/plex.dockeruserset
     echo "/config/Library/Application\\\ Support" >/var/plexguide/pgscan/plex.path
+else
+    echo "plex" >/var/plexguide/pgscan/plex.dockeruserset
+    echo "/var/lib/plexmediaserver/Library/Application\\\ Support" >/var/plexguide/pgscan/plex.path
 fi
 
 plexcontainer=$(docker ps --format '{{.Image}}' | grep "plex")
