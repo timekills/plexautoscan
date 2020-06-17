@@ -5,14 +5,13 @@
 # echo "false" >/var/plexguide/pgscan/fixmatch.status
 # echo "NOT-SET" >/var/plexguide/pgscan/plex.docker
 
-
 folder="/var/plexguide/pgscan"
 if [[ ! -d "$folder" ]]; then
 sudo mkdir -p /var/plexguide/pgscan
 sudo echo "en" >/var/plexguide/pgscan/fixmatch.lang
 sudo echo "false" >/var/plexguide/pgscan/fixmatch.status
 sudo echo "NOT-SET" >/var/plexguide/pgscan/plex.docker
-sudo echo "/var/lib/plexmediaserver/Library/Application\\\ Support" >/var/plexguide/pgscan/plex.path
+sudo echo "NOT-SET" >/var/plexguide/pgscan/plex.path
 fi
 
 variable() {
@@ -315,21 +314,18 @@ EOF
 }
 pversion() {
 
-plexcontainerpms=$(docker ps --format '{{.Image}}' | grep "plexinc/pms")
-if [[ "$plexcontainerpms" == "plexinc/pms" ]]; then
+plexcontainertest=$(docker ps --format '{{.Image}}' | grep "plexinc/pms")
+if [[ "$plexcontainertest" == "plexinc/pms" ]]; then
     echo "plex" >/var/plexguide/pgscan/plex.dockeruserset
     echo "/var/lib/plexmediaserver/Library/Application\\\ Support" >/var/plexguide/pgscan/plex.path
-fi
-
-plexcontainerlsio=$(docker ps --format '{{.Image}}' | grep "linuxserver/plex")
-if [[ "$plexcontainerlsio" == "linuxserver/plex" ]]; then
+else
     echo "abc" >/var/plexguide/pgscan/plex.dockeruserset
     echo "/config/Library/Application\\\ Support" >/var/plexguide/pgscan/plex.path
 fi
 
 plexcontainer=$(docker ps --format '{{.Image}}' | grep "plex")
 pasuserdocker=$(cat /var/plexguide/pgscan/plex.dockeruserset)
-
+plexsupportdir=$(cat /var/plexguide/pgscan/plex.path)
 tee <<-EOF
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -341,6 +337,7 @@ Plex        Docker  used "plex"
 
 Plex Docker Image:     [ $plexcontainer ]
 Plex Docker user:      [ $pasuserdocker ]
+Plex Support Dir:      [ $plexsupportdir ]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
