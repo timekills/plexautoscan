@@ -18,6 +18,7 @@ fi
 serviveplex="/etc/systemd/system/plex_autoscan.service"
 if [ -f "$serviveplex" ]; then 
    sudo systemctl disable plex_autoscan.service
+   sudo systemctl stop plex_autoscan.service
    sudo rm -f "$serviveplex"
 fi
 
