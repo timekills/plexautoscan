@@ -14,6 +14,13 @@ sudo echo "NOT-SET" >/var/plexguide/pgscan/plex.docker
 sudo echo "NOT-SET" >/var/plexguide/pgscan/plex.path
 fi
 
+###removeoldpart
+serviveplex="plex_autoscan.service"
+if [ -f "$serviveplex" ]; then 
+   sudo systemctl disable plex_autoscan.service
+   sudo rm -f /etc/systemd/system/plex_autoscan.service
+fi
+
 variable() {
   file="$1"
   if [[ ! -e "$file" ]]; then echo "$2" >$1; fi
