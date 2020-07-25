@@ -95,6 +95,10 @@
   with_items:
     - '/opt/appdata/plexautoscan/'
     - '/opt/appdata/plexautoscan/config'
+    - '/opt/appdata/plexautoscan/config/rclone'
+
+- name: copy rclone.conf 
+  shell: 'cp /opt/appdata/plexguide/rclone.conf /opt/appdata/plexautoscan/config/rclone'
 
 - name: Settings | Check if 'config.json' exists
   stat:
