@@ -46,7 +46,6 @@
           - '/opt/appdata/plex/database/Library/Application Support/Plex Media Server/Plug-in Support/Databases/:/plexDb'
           - '/etc/localtime:/etc/localtime:ro'
           - '/var/run/docker.sock:/var/run/docker.sock'
-          - '/opt/appdata/plexguide:/config/rclone:ro'
           - '/mnt:/mnt'
 
     - name: 'Setting {{pgrole}} ENV'
