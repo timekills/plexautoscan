@@ -12,6 +12,7 @@ sudo echo "en" >/var/plexguide/pgscan/fixmatch.lang
 sudo echo "false" >/var/plexguide/pgscan/fixmatch.status
 sudo echo "NOT-SET" >/var/plexguide/pgscan/plex.docker
 sudo echo "NOT-SET" >/var/plexguide/pgscan/plex.path
+sudo echo "NOT-SET" >/var/plexguide/pgscan/gdrive.id
 fi
 
 ###removeoldpart
@@ -334,6 +335,8 @@ fi
 plexcontainer=$(docker ps --format '{{.Image}}' | grep "plex")
 pasuserdocker=$(cat /var/plexguide/pgscan/plex.dockeruserset)
 plexsupportdir=$(cat /var/plexguide/pgscan/plex.path)
+cat /opt/appdata/plexguide/.gdrive | grep "client_id" | awk '{print $3}' >/var/plexguide/pgscan/gdrive.id
+
 tee <<-EOF
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -341,7 +344,6 @@ tee <<-EOF
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Linuxserver Docker  used "abc"
 Plex        Docker  used "plex"
-
 
 Plex Docker Image:     [ $plexcontainer ]
 Plex Docker user:      [ $pasuserdocker ]
