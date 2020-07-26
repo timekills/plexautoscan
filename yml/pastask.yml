@@ -56,6 +56,10 @@
   shell: 'cat /var/plexguide/pgscan/plex.path'
   register: plex_lib_folder
 
+- name: Register GDrive Client_ID
+  shell: 'cat /var/plexguide/pgscan/gdrive.id'
+  register: gdriveid
+
 - name: Create mounted.bin for trash
   shell: 'touch $(cat /var/plexguide/server.hd.path)/unionfs/mounted.bin'
 
@@ -140,6 +144,10 @@
   - name: Register Plex lib folder
     shell: 'cat /var/plexguide/pgscan/plex.path'
     register: plex_lib_folder
+
+  - name: Register GDrive Client_ID
+    shell: 'cat /var/plexguide/pgscan/gdrive.id'
+    register: gdriveid
 
   when: not plex_autoscan_config.stat.exists
  
