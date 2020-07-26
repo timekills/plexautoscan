@@ -363,7 +363,10 @@ showuppage() {
   dtra=$(docker ps --format '{{.Names}}' | grep "traefik")
   if [[ "$dpas" == "plexautoscan" && "$dtra" == "traefik"  ]]; then
     showpaspage="http://plexautoscan:3468/$(cat /var/plexguide/pgscan/pgscan.serverpass)"
-  else showpaspage="http://$(cat /var/plexguide/server.ip):3468/$(cat /var/plexguide/pgscan/pgscan.serverpass)"; fi
+    showppagedomain="https://plexautoscan.$(cat /var/plexguide/server.domain)/$(cat /var/plexguide/pgscan/pgscan.serverpass)"
+  else 
+    showpaspage="http://$(cat /var/plexguide/server.ip):3468/$(cat /var/plexguide/pgscan/pgscan.serverpass)"
+  fi
 }
 
 question1() {
@@ -437,9 +440,22 @@ tee <<-EOF
 [3] Plex Docker Version                   [ $dplexset ]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EOF
+if [[ $(cat /var/plexguide/server.domain) != "NOT-SET" ]]; then
+tee <<-EOF
 
-PAS Webhook ARRs : [ $showpaspage ]
+  PAS Webhook ARRs : [ $showpaspage ]
+  PAS Domain       : [ $showpagedomain ]
 
+EOF
+else
+tee <<-EOF
+
+  PAS Webhook ARRs : [ $showpaspage ]
+
+EOF
+fi
+tee <<-EOF
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 [A] Redeploy Plex-Auto-Scan Docker          [ $dstatus ]
