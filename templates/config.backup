@@ -2,13 +2,13 @@
    "DOCKER_NAME":"plex",
    "GOOGLE": {
      "ENABLED": false,
-     "CLIENT_ID": "",
+     "CLIENT_ID": "{{gdriveid}}",
      "CLIENT_SECRET": "",
      "ALLOWED": {
        "FILE_PATHS": [
-         "My Drive/Media/Movies/",
-         "My Drive/Media/TV/",
-         "My Drive/Media/Music/"
+         "My Drive/Movies/",
+         "My Drive/TV/",
+         "My Drive/Music/"
        ],
        "FILE_EXTENSIONS": true,
        "FILE_EXTENSIONS_LIST": [
@@ -36,28 +36,28 @@
    "PLEX_DATABASE_PATH": "/plexDb/com.plexapp.plugins.library.db",
    "PLEX_EMPTY_TRASH": true,
    "PLEX_EMPTY_TRASH_CONTROL_FILES":[
-      "/mnt/unionfs/mounted.bin"
+      "{{path.stdout}}/unionfs/mounted.bin"
    ],
    "PLEX_EMPTY_TRASH_MAX_FILES": 50,
    "PLEX_EMPTY_TRASH_ZERO_DELETED": true,
    "PLEX_LD_LIBRARY_PATH": "/usr/lib/plexmediaserver/lib",
    "PLEX_LOCAL_URL": "http://plex:32400",
    "PLEX_SCANNER": "/usr/lib/plexmediaserver/Plex\\ Media\\ Scanner",
-   "PLEX_SUPPORT_DIR": "/config/Library/Application\\ Support",
+   "PLEX_SUPPORT_DIR": "{{plex_lib_folder.stdout}}",
    "PLEX_USER": "{{plex_docker_user.stdout}}",
    "PLEX_TOKEN": "{{plex_auth_token.stdout}}",
    "PLEX_CHECK_BEFORE_SCAN": true,
    "PLEX_WAIT_FOR_EXTERNAL_SCANNERS": false,
    "RCLONE": {
     "BINARY": "/usr/bin/rclone",
-    "CONFIG": "/home/user/.config/rclone/rclone.conf",
+    "CONFIG": "/config/rclone/rclone.conf",
     "CRYPT_MAPPINGS": {
     },
     "RC_CACHE_REFRESH": {
       "ENABLED": false,
       "FILE_EXISTS_TO_REMOTE_MAPPINGS": {
       "Media/": [
-          "/mnt/rclone/Media/"
+          "{{path.stdout}}/Media/"
       ]
       },
       "RC_URL": "http://localhost:5572"
@@ -66,8 +66,8 @@
    "RUN_COMMAND_BEFORE_SCAN":"",
    "RUN_COMMAND_AFTER_SCAN": "",
    "SERVER_ALLOW_MANUAL_SCAN": true,
-   "SERVER_FILE_CHECK_DELAY": 15,
-   "SERVER_MAX_FILE_CHECKS": 5,
+   "SERVER_FILE_CHECK_DELAY": 90,
+   "SERVER_MAX_FILE_CHECKS": 10,
    "SERVER_FILE_EXIST_PATH_MAPPINGS":{
      "/home/user/rclone/": [
        "/data/"
@@ -79,12 +79,12 @@
    "SERVER_IP": "0.0.0.0",
    "SERVER_PASS": "{{plex_autoscan_server_pass.stdout}}",
    "SERVER_PATH_MAPPINGS":{
-     "/mnt/unionfs/": [
+     "{{path.stdout}}/unionfs/": [
        "/home/user/media/fused/"
      ]
    },
    "SERVER_PORT": 3468,
-   "SERVER_SCAN_DELAY": 15,
+   "SERVER_SCAN_DELAY": 30,
    "SERVER_SCAN_FOLDER_ON_FILE_EXISTS_EXHAUSTION": true,
    "SERVER_SCAN_PRIORITIES":{
    },
