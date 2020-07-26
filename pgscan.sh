@@ -363,7 +363,7 @@ showuppage() {
   dtra=$(docker ps --format '{{.Names}}' | grep "traefik")
   if [[ "$dpas" == "plexautoscan" && "$dtra" == "traefik"  ]]; then
     showpaspage="http://plexautoscan:3468/$(cat /var/plexguide/pgscan/pgscan.serverpass)"
-    showppagedomain="https://plexautoscan.$(cat /var/plexguide/server.domain)/$(cat /var/plexguide/pgscan/pgscan.serverpass)"
+    showpagedomain="https://plexautoscan.$(cat /var/plexguide/server.domain)/$(cat /var/plexguide/pgscan/pgscan.serverpass)"
   else 
     showpaspage="http://$(cat /var/plexguide/server.ip):3468/$(cat /var/plexguide/pgscan/pgscan.serverpass)"
   fi
