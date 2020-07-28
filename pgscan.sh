@@ -497,6 +497,6 @@ tokenstatus
 variable /var/plexguide/pgscan/fixmatch.lang "en"
 variable /var/plexguide/pgscan/fixmatch.status "false"
 variable /var/plexguide/pgscan/plex.docker "NOT-SET"
-varibale /var/plexguide/pgscan/plex.path "/var/lib/plexmediaserver/Library/Application\\\ Support"
+variable /var/plexguide/pgscan/plex.path "/var/lib/plexmediaserver/Library/Application\\\ Support"
 deploycheck
 question1
