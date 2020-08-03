@@ -59,6 +59,10 @@
 - name: Register GDrive Client_ID
   shell: 'cat /var/plexguide/pgscan/gdrive.id'
   register: gdriveid
+  
+- name: Register GDrive Client_Secret
+  shell: 'cat /var/plexguide/pgscan/gdrive.secret'
+  register: gdrivesecret
 
 - name: Create mounted.bin for trash
   shell: 'touch $(cat /var/plexguide/server.hd.path)/unionfs/mounted.bin'
