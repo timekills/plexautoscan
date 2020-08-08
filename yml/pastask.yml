@@ -65,19 +65,34 @@
   register: gdrivesecret
 
 - name: Create mounted.bin for trash
-  shell: 'touch $(cat /var/plexguide/server.hd.path)/unionfs/mounted.bin'
+  file: 
+    path: /mnt/unionfs/mounted.bin
+    state: touch
+    mode: '0755'
 
-- name: set permissions on mounted.bin for trash || part 1
-  shell: 'chown 1000:1000 $(cat /var/plexguide/server.hd.path)/unionfs/mounted.bin'
-
-- name: set permissions on mounted.bin for trash || part 2
-  shell: 'chmod a+x $(cat /var/plexguide/server.hd.path)/unionfs/mounted.bin'
+- name: set permissions on mounted.bin for trash
+  file:
+    path: /mnt/unionfs/mounted.bin
+    state: file
+    recurse: yes
+    owner: 1000
+    group: 1000
 
 - name: Set User Permission  for Plex Folder | part 1
-  shell: 'chown 1000:1000 "/opt/appdata/plex/database/Library/Application Support/"'
+  file:
+    path: "/opt/appdata/plex/database/Library/Application Support/"
+    state: directory
+    recurse: yes
+    owner: 1000
+    group: 1000
 
 - name: Set User Permission  for Plex Folder | part 2
-  shell: 'chown 1000:1000 /opt/appdata/plex/database/Library/'
+  file:
+    path: "/opt/appdata/plex/database/Library/"
+    state: directory
+    recurse: yes
+    owner: 1000
+    group: 1000
 
 - name: Display Plex Auth Token
   debug:
