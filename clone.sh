@@ -15,7 +15,7 @@ function clone() {
     sudo git clone --quiet https://github.com/doob187/plexautoscan.git /opt/plexguide/menu/pgscan
     sudo chown -cR 1000:1000 /opt/plexguide/menu/
     sudo chmod -cR 755 /opt/plexguide/menu/
-    sudo bash /opt/plexguide/menu/pgscan.sh
+    sudo bash /opt/plexguide/menu/pgscan/pgscan.sh
 }
 sudocheck
 clone
