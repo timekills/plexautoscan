@@ -23,6 +23,17 @@ if [ -f "$serviveplex" ]; then
    sudo rm -f "$serviveplex"
 fi
 
+function sudocheck () {
+  if [[ $EUID -ne 0 ]]; then
+    tee <<-EOF
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⛔️  You Must Execute as a SUDO USER (with sudo) or as ROOT!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EOF
+    exit 0
+  fi
+}
+
 variable() {
   file="$1"
   if [[ ! -e "$file" ]]; then echo "$2" >$1; fi
@@ -493,6 +504,7 @@ EOF
   esac
 }
 # FUNCTIONS END ##############################################################
+sudocheck
 plexcheck
 tokenstatus
 variable /var/plexguide/pgscan/fixmatch.lang "en"
