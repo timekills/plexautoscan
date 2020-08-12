@@ -5,7 +5,7 @@
 # echo "false" >/var/plexguide/pgscan/fixmatch.status
 # echo "NOT-SET" >/var/plexguide/pgscan/plex.docker
 
-folder="/var/plexguide/pgscan"
+folder=/var/plexguide/pgscan
 if [[ ! -d "$folder" ]]; then
 sudo mkdir -p /var/plexguide/pgscan
 sudo echo "en" >/var/plexguide/pgscan/fixmatch.lang
