@@ -387,8 +387,59 @@ question1() {
     deplyoed
   else undeployed; fi
 }
+askuser() {
+tee <<-EOF
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚀 Plex_AutoScan Fix Missmatch
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[A] REDEPLOY | backup settings ! FALSE
+[B] REDEPLOY | backup settings | TRUE
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[Z] - Exit
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EOF
+
+  read -p '↘️  Type A or B | Press [ENTER]: ' typed </dev/tty
+case $typed in
+  A) pasdeploy && clear && question1 ;;
+  a) pasdeploy && clear && question1 ;;
+  B) backup && clear && question1 ;;
+  b) backup && clear && question1 ;;
+  z) exit 0 ;;
+  Z) exit 0 ;;
+  *) question1 ;;
+  esac
+}
+
+backup() {
+ sudo mkdir -p /var/plex_autoscan_backup/
+  tar --warning=no-file-changed --ignore-failed-read --absolute-names --warning=no-file-removed \
+    -C /opt/appdata/plexautoscan -cf /var/plex_autoscan_backup/plex_autoscan.tar.gz ./
+
+printfiles=$(ls -ah /var/plex_autoscan_backup/ | grep -E 'plex')
+
+tee <<-EOF
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⌛ Backup existing plexautoscan installation
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+$printfiles
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EOF
+sleep 30
+}
+
 pasdeploy() {
-ansible-playbook /opt/plexguide/menu/pgscan/yml/plexautoscan.yml
+dcheck=$(docker ps --format '{{.Names}}' | grep "plexautoscan")
+  if [[ "$dcheck" == "plexautoscan" ]]; then
+     askuser
+  else
+     ansible-playbook /opt/plexguide/menu/pgscan/yml/plexautoscan.yml
+  fi
 }
 undeployed() {
 langfa=$(cat /var/plexguide/pgscan/fixmatch.status)
