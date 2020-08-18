@@ -1,3 +1,10 @@
+#!/bin/bash
+#
+# Title:      PGBlitz (Reference Title File)
+# Author(s):  Admin9705
+# URL:        https://pgblitz.com - http://github.pgblitz.com
+# GNU:        General Public License v3.0
+################################################################################
 ---
 # RECALL KEY VARIABLES #########################################################
 
@@ -57,7 +64,7 @@
   when:  ucname_check.stat.exists == true and ucname.stdout != ""
 
 - name: check if user port file exists
-  stat: 
+  stat:
     path: /var/plexguide/{{pgrole}}.port
   register: ueport_check
 
@@ -83,24 +90,10 @@
   ignore_errors: True
 
   # APPDATA
-- name: 'Creating appdata folder if it does not exist.'
-  shell: 'mkdir -p /opt/appdata/{{pgrole}}'
-
-- name: 'Setting ownership on appdata'
-  shell: 'chown 1000:1000 /opt/appdata/{{pgrole}}'
-  when: '"plex" in pgrole'
-
-- name: 'Setting permissions on appdata'
-  shell: 'chmod 775 /opt/appdata/{{pgrole}}'
-  when: '"plex" in pgrole'
-
-- name: 'Setting ownership on appdata recursivley (this can take a while!)'
-  shell: 'chown -R 1000:1000 /opt/appdata/{{pgrole}}'
-  when: '"plex" not in pgrole'
-
-- name: 'Setting permissions on appdata recursivley (this can take a while!)'
-  shell: 'chmod -R 775 /opt/appdata/{{pgrole}}'
-  when: '"plex" not in pgrole'
+- name: Create {{pgrole}} directories
+  file: "path={{ item }} state=directory mode=0775 owner=1000 group=1000 recurse=yes"
+  with_items:
+    - '/opt/appdata/{{pgrole}}'
 
 # OVERWRITE IMAGES #############################################################
 - name: Check if Image Variable Exists
@@ -143,9 +136,24 @@
   shell: 'echo {{extport}} > /tmp/program_port'
   ignore_errors: True
 
+- name: 'Check Google-Authentication Part I'
+  stat:
+    path: '/opt/pgshield/drop.sh'
+  register: dropcheck
+
+- name: 'Check Google-Authentication Part II'
+  stat:
+    path: '/opt/plexguide/menu/shield/drop.sh'
+  register: dropcheckv2
+
 # FOR AUTHENTICATION
 - name: 'Script Execute Part I'
   shell: 'bash /opt/pgshield/drop.sh'
+  when: dropcheck.stat.exists
+
+- name: 'Script  Execute Part II'
+  shell: 'bash /opt/plexguide/menu/shield/drop.sh'
+  when: dropcheckv2.stat.exists
 
 - name: 'Script Execute Part II'
   shell: 'cat /var/plexguide/auth.var'
