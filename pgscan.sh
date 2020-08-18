@@ -272,9 +272,9 @@ tee <<-EOF
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 NOTE : Sample :
 
-this will work : 
+this will work :
 en
-de 
+de
 jp
 ch
 
@@ -403,7 +403,8 @@ tee <<-EOF
 EOF
 
   read -p '↘️  Type A or B | Press [ENTER]: ' typed </dev/tty
-case $typed in
+
+  case $typed in
   A) pasdeploy && clear && question1 ;;
   a) pasdeploy && clear && question1 ;;
   B) backup && clear && question1 ;;
@@ -413,9 +414,16 @@ case $typed in
   *) question1 ;;
   esac
 }
-
 backup() {
- sudo mkdir -p /var/plex_autoscan_backup/
+  sudo docker stop plexautoscan
+  if [[ ! -d "/var/plex_autoscan_backup/" ]]; then
+     mkdir -p /var/plex_autoscan_backup/
+     chown -cR 1000:1000 /var/plex_autoscan_backup
+     chmod -cR 775 /var/plex_autoscan_backup
+  else
+     chown -cR 1000:1000 /var/plex_autoscan_backup
+     chmod -cR 775 /var/plex_autoscan_backup
+  fi
   tar --warning=no-file-changed --ignore-failed-read --absolute-names --warning=no-file-removed \
     -C /opt/appdata/plexautoscan -cf /var/plex_autoscan_backup/plex_autoscan.tar.gz ./
 
@@ -430,9 +438,12 @@ $printfiles
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
-sleep 30
-}
 
+chown -cR 1000:1000 /var/plex_autoscan_backup
+chmod -cR 775 /var/plex_autoscan_backup
+
+doneenter
+}
 pasdeploy() {
 dcheck=$(docker ps --format '{{.Names}}' | grep "plexautoscan")
   if [[ "$dcheck" == "plexautoscan" ]]; then
