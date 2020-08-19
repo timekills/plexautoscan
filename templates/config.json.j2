@@ -25,7 +25,9 @@
        ]
      },
      "TEAMDRIVE": false,
-     "TEAMDRIVES": [],
+     "TEAMDRIVES": [
+       "Name of the Team Drive"
+     ],
      "POLL_INTERVAL": 120,
      "SHOW_CACHE_LOGS": false
    },
@@ -69,8 +71,8 @@
    "SERVER_FILE_CHECK_DELAY": 90,
    "SERVER_MAX_FILE_CHECKS": 10,
    "SERVER_FILE_EXIST_PATH_MAPPINGS":{
-     "/home/user/rclone/": [
-       "/data/"
+     "{{path.stdout}}/": [
+       "{{path.stdout}}/""
      ]
    },
    "SERVER_IGNORE_LIST":[
