@@ -59,6 +59,10 @@
 - name: Register GDrive Client_ID
   shell: 'cat /var/plexguide/pgscan/gdrive.id'
   register: gdriveid
+
+- name: Register serverpath
+  shell: 'cat /var/plexguide/server.hd.path'
+  register: path
   
 - name: Register GDrive Client_Secret
   shell: 'cat /var/plexguide/pgscan/gdrive.secret'
