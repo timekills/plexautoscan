@@ -346,8 +346,8 @@ fi
 plexcontainer=$(docker ps --format '{{.Image}}' | grep "plex")
 pasuserdocker=$(cat /var/plexguide/pgscan/plex.dockeruserset)
 plexsupportdir=$(cat /var/plexguide/pgscan/plex.path)
-cat /opt/appdata/plexguide/.gdrive | grep "client_id" | awk '{print $3}' >/var/plexguide/pgscan/gdrive.id
-cat /opt/appdata/plexguide/.gdrive | grep "client_secret" | awk '{print $3}' >/var/plexguide/pgscan/gdrive.secret
+echo $(cat /opt/appdata/plexguide/rclone.conf | grep "client_id" | awk '{print $3}' | head -n 1) >/var/plexguide/pgscan/gdrive.id
+echo $(cat /opt/appdata/plexguide/rclone.conf | grep "client_secret" | awk '{print $3}' | head -n 1) >/var/plexguide/pgscan/gdrive.secret
 
 tee <<-EOF
 
