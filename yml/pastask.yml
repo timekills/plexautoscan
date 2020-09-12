@@ -158,4 +158,8 @@
     shell: 'cat /var/plexguide/pgscan/gdrive.id'
     register: gdriveid
 
+  - name: Register GDrive Client_Secret
+    shell: 'cat /var/plexguide/pgscan/gdrive.secret'
+    register: gdrivesecret
+
   when: not plex_autoscan_config.stat.exists
