@@ -20,7 +20,7 @@ jobs:
       with:
         ref: ${{ github.event.client_payload.branch }}
     - name: Bash Lint check
-      uses: azohra/shell-linter@v0.3.0
+      uses: azohra/shell-linter@v0.4.0
     - name: Dockerfile Lint   
       uses: ghe-actions/dockerfile-validator@v1.6
       with:
